@@ -1,0 +1,50 @@
+version: "2.1"
+services:
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    #    network_mode: host
+    networks:
+      - traefik-proxy
+    ports:
+      - "3005:3005/tcp"
+      - "8324:8324/tcp"
+      - "32469:32469/tcp"
+      - "1900:1900/udp"
+      - "32400:32400/tcp"
+      - "32410:32410/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+    environment:
+      - PUID=2000
+      - PGID=2000
+      - VERSION=public
+      - UMASK_SET=022 #optional
+      - "ADVERTISE_IP=http://10.10.10.10:32400,https://plex.frostwolf.io:443"
+    volumes:
+      - config:/config
+      - /mnt/zstorage/media/television:/mnt/media/television:ro
+      - /mnt/zstorage/media/movies:/mnt/media/movies:ro
+      - /mnt/zstorage/media/movies-uhd:/mnt/media/movies-uhd:ro
+      - /mnt/zstorage/media/video:/mnt/media/video:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.plex-ext.entrypoints=http"
+      - "traefik.http.routers.plex-ext.rule=Host(`plex.frostwolf.io`)"
+      - "traefik.http.routers.plex-ext.middlewares=plex-https-redirect"
+      - "traefik.http.routers.plex-ext-secure.entrypoints=https"
+      - "traefik.http.routers.plex-ext-secure.rule=Host(`plex.frostwolf.io`)"
+      - "traefik.http.routers.plex-ext-secure.tls=true"
+      - "traefik.http.routers.plex-ext-secure.service=plex-svc"
+      - "traefik.http.middlewares.plex-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.services.plex-svc.loadbalancer.server.port=32400"
+      - "traefik.docker.network=traefik-proxy"
+    restart: unless-stopped
+
+networks:
+  traefik-proxy:
+    external: true
+
+volumes:
+  config: 

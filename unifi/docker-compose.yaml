@@ -1,0 +1,71 @@
+version: '2.2'
+services:
+  mongo:
+    image: mongo:3.4
+    container_name: ${COMPOSE_PROJECT_NAME}-mongo
+    networks:
+      - unifi
+    restart: always
+    volumes:
+      - db:/data/db
+  controller:
+    image: "jacobalberty/unifi:${TAG:-latest}"
+    container_name: ${COMPOSE_PROJECT_NAME}-controller
+    depends_on:
+      - mongo
+    init: true
+    networks:
+      - unifi
+      - traefik-proxy
+    restart: always
+    volumes:
+      - data:/unifi/data
+      - log:/unifi/log
+      - cert:/unifi/cert
+      - init:/unifi/init.d
+    environment:
+      DB_URI: mongodb://mongo/unifi
+      STATDB_URI: mongodb://mongo/unifi_stat
+      DB_NAME: unifi
+    ports:
+      - 3478:3478/udp # STUN
+      - 6789:6789/tcp # Speed test
+      - 8080:8080/tcp # Device/ controller comm.
+      - 8880:8880/tcp # HTTP portal redirection
+      - 8843:8843/tcp # HTTPS portal redirection
+      - 8443:8443/tcp
+      - 10001:10001/udp # AP discovery
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.unifi.entrypoints=http"
+      - "traefik.http.routers.unifi.rule=Host(`unifi.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.unifi.middlewares=unifi-https-redirect"
+      - "traefik.http.middlewares.unifi-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.unifi-secure.entrypoints=https"
+      - "traefik.http.routers.unifi-secure.rule=Host(`unifi.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.unifi-secure.tls=true"
+      - "traefik.http.routers.unifi-secure.service=unifi-svc"
+      - "traefik.http.services.unifi-svc.loadbalancer.server.port=8443"
+      - "traefik.http.services.unifi-svc.loadbalancer.server.scheme=https"
+      - "traefik.docker.network=traefik-proxy"
+  logs:
+    image: bash
+    container_name: ${COMPOSE_PROJECT_NAME}-logs
+    depends_on:
+      - controller
+    command: bash -c 'tail -F /unifi/log/*.log'
+    restart: always
+    volumes:
+      - log:/unifi/log
+
+volumes:
+  db:
+  data:
+  log:
+  cert:
+  init:
+
+networks:
+  unifi:
+  traefik-proxy:
+    external: true

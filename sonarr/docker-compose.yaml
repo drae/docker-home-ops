@@ -1,0 +1,43 @@
+version: "2.1"
+services:
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=2000
+      - PGID=2000
+      - TZ=Europe/London
+      - UMASK_SET=022 #optional
+    networks:
+      - traefik-proxy
+      - nzbget
+    volumes:
+      - config:/config
+      - /mnt/zstorage/media/television:/mnt/media/television
+      - downloads:/downloads
+    restart: unless-stopped
+    labels:
+      - "sui.enabled=true"
+      - "sui.icon=television-classic"
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.entrypoints=http"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.sonarr.middlewares=sonarr-https-redirect"
+      - "traefik.http.middlewares.sonarr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.sonarr-secure.entrypoints=https"
+      - "traefik.http.routers.sonarr-secure.rule=Host(`sonarr.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.sonarr-secure.tls=true"
+      - "traefik.http.routers.sonarr-secure.service=sonarr-svc"
+      - "traefik.http.services.sonarr-svc.loadbalancer.server.port=8989"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
+  nzbget:
+    external: true
+
+volumes:
+  config:
+  downloads:
+    external: true

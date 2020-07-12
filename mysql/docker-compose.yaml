@@ -1,0 +1,28 @@
+version: "2.1"
+services:
+  mysql:
+    image: linuxserver/mariadb:latest
+    container_name: mysql
+    environment:
+      - PUID=2000
+      - PGID=2000
+      - TZ=Europe/London
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik-proxy
+    volumes:
+      - db:/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+
+networks:
+  traefik-proxy:
+    external: true
+
+volumes:
+  config:
+  db:
+    external: true

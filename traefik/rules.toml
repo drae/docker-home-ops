@@ -1,0 +1,26 @@
+[http.routers]
+   # Define a connection between requests and services
+     [http.routers.tvheadend]
+        rule = "Host(`tvheadend.p.lan.frostwolf.io`)"
+        entrypoints = ["https"]
+        service = "tvheadend"
+     [http.routers.tvheadend.tls]
+        certResolver = "cloudflare"
+     [http.routers.cockpit]
+        rule = "Host(`cockpit.p.lan.frostwolf.io`)"
+        entrypoints = ["https"]
+        service = "cockpit"
+     [http.routers.cockpit.tls]
+        certResolver = "cloudflare"
+
+ [http.services]
+        # Define how to reach an existing service on our infrastructure
+        [http.services.tvheadend.loadBalancer]
+           [[http.services.tvheadend.loadBalancer.servers]]
+             url = "http://10.10.10.98:9981"
+        [http.services.cockpit.loadBalancer]
+           [[http.services.cockpit.loadBalancer.servers]]
+             url = "http://10.10.10.10:9090"
+
+
+

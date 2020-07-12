@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  samba:
+    image: dperson/samba
+    environment:
+      TZ: ${TZ}
+    networks:
+      - samba
+    ports:
+      - 139:139/tcp
+      - 445:445/tcp
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - /mnt/zstorage/media/television:/mnt:z
+      - /mnt/zstorage/media/movies:/mnt2:z
+      - /mnt/zstorage/media/movies4k:/mnt3:z
+      - /mnt/zstorage/media/video:/mnt4:z
+      - /mnt/zstorage/media/music:/mnt5:z
+      - /mnt/zstorage/media/pvr:/mnt6:z
+      - /mnt/zstorage/archives:/mnt7:z
+      - /mnt/zstorage/iso:/mnt8:z
+    hostname: ${SAMBA_HOST}
+    command: -s "television;/mnt" -s "movies;/mnt2" -s "movies-uhd;/mnt3" -s "video;/mnt4" -s "music;/mnt5" -s "pvr;/mnt6" -s "archives;/mnt7" -s "iso;/mnt8"
+
+  wsdd:
+    image: jonasped/wsdd
+    environment: 
+      - HOSTNAME=APOLLO
+    restart: unless-stopped
+    network_mode: host
+
+networks:
+  samba:
+    external: true

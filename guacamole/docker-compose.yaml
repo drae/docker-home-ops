@@ -1,0 +1,14 @@
+version: "2.1"
+services:
+  guac:
+    image: guacamole/guacd
+    container_name: guacd
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik-proxy
+    restart: unless-stopped
+
+networks:
+  traefik-proxy:
+    external: true
