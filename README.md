@@ -3,5 +3,5 @@
 Till there is an ansible script run, copy .env.sample to .env and change the variables then run:
 
 ```shell
-. ../.env && cat docker-compose.yaml | envsubst | docker-compose up -d
+set -a && . ../.env && cat docker-compose.yaml | envsubst | docker-compose up -d
 ```
