@@ -18,25 +18,29 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik.yaml:/traefik.yml:ro
       - ./rules.toml:/etc/traefik/rules.toml
-      - ./data/acme.json:/acme.json
+      - ./traefik.yaml:/etc/traefik/traefik.yaml
+      - letsencrypt_json:/letsencrypt
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.p.lan.starstreak.net`)"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
-      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.p.lan.starstreak.net`)"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main=frostwolf.io"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.frostwolf.io"
-      - "traefik.http.routers.traefik-secure.tls.domains[1].sans=*.lan.frostwolf.io"
-      - "traefik.http.routers.traefik-secure.tls.domains[2].sans=*.p.lan.frostwolf.io"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=starstreak.net"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.starstreak.net"
+      - "traefik.http.routers.traefik-secure.tls.domains[1].sans=*.lan.starstreak.net"
+      - "traefik.http.routers.traefik-secure.tls.domains[2].sans=*.p.lan.starstreak.net"
       - "traefik.http.routers.traefik-secure.service=api@internal"
 
 networks:
   traefik-proxy:
+    external: true
+
+volumes:
+  letsencrypt_json:
     external: true

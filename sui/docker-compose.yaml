@@ -17,11 +17,11 @@ services:
       - sui.icon=home
       - "traefik.enable=true"
       - "traefik.http.routers.sui.entrypoints=http"
-      - "traefik.http.routers.sui.rule=Host(`sui.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.sui.rule=Host(`sui.p.lan.starstreak.net`)"
       - "traefik.http.routers.sui.middlewares=sui-https-redirect"
       - "traefik.http.middlewares.sui-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.sui-secure.entrypoints=https"
-      - "traefik.http.routers.sui-secure.rule=Host(`sui.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.sui-secure.rule=Host(`sui.p.lan.starstreak.net`)"
       - "traefik.http.routers.sui-secure.tls=true"
       - "traefik.http.routers.sui-secure.service=sui-svc"
       - "traefik.http.services.sui-svc.loadbalancer.server.port=6999"

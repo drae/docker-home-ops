@@ -15,11 +15,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tautulli.entrypoints=http"
-      - "traefik.http.routers.tautulli.rule=Host(`tautulli.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.p.lan.starstreak.net`)"
       - "traefik.http.routers.tautulli.middlewares=tautulli-https-redirect"
       - "traefik.http.middlewares.tautulli-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.tautulli-secure.entrypoints=https"
-      - "traefik.http.routers.tautulli-secure.rule=Host(`tautulli.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.tautulli-secure.rule=Host(`tautulli.p.lan.starstreak.net`)"
       - "traefik.http.routers.tautulli-secure.tls=true"
       - "traefik.http.routers.tautulli-secure.service=tautulli-svc"
       - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"

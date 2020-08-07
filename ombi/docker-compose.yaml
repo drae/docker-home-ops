@@ -15,11 +15,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ombi.entrypoints=http"
-      - "traefik.http.routers.ombi.rule=Host(`ombi.svc.frostwolf.io`)"
+      - "traefik.http.routers.ombi.rule=Host(`ombi.svc.starstreak.net`)"
       - "traefik.http.routers.ombi.middlewares=ombi-https-redirect"
       - "traefik.http.middlewares.ombi-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.ombi-secure.entrypoints=https"
-      - "traefik.http.routers.ombi-secure.rule=Host(`ombi.svc.frostwolf.io`)"
+      - "traefik.http.routers.ombi-secure.rule=Host(`ombi.svc.starstreak.net`)"
       - "traefik.http.routers.ombi-secure.tls=true"
       - "traefik.http.routers.ombi-secure.service=ombi-svc"
       - "traefik.http.services.ombi-svc.loadbalancer.server.port=3579"

@@ -1,13 +1,13 @@
 [http.routers]
    # Define a connection between requests and services
      [http.routers.tvheadend]
-        rule = "Host(`tvheadend.p.lan.frostwolf.io`)"
+        rule = "Host(`tvheadend.p.lan.starstreak.net`)"
         entrypoints = ["https"]
         service = "tvheadend"
      [http.routers.tvheadend.tls]
         certResolver = "cloudflare"
      [http.routers.cockpit]
-        rule = "Host(`cockpit.p.lan.frostwolf.io`)"
+        rule = "Host(`cockpit.p.lan.starstreak.net`)"
         entrypoints = ["https"]
         service = "cockpit"
      [http.routers.cockpit.tls]

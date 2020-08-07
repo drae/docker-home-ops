@@ -3,7 +3,7 @@ services:
   netdata:
     image: netdata/netdata
     container_name: netdata 
-    hostname: netdata.p.lan.frostwolf.io
+    hostname: netdata.p.lan.starstreak.net
     security_opt:
       - apparmor:unconfined
     cap_add:
@@ -20,11 +20,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.netdata.entrypoints=http"
-      - "traefik.http.routers.netdata.rule=Host(`netdata.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.netdata.rule=Host(`netdata.p.lan.starstreak.net`)"
       - "traefik.http.routers.netdata.middlewares=netdata-https-redirect"
       - "traefik.http.middlewares.netdata-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.netdata-secure.entrypoints=https"
-      - "traefik.http.routers.netdata-secure.rule=Host(`netdata.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.netdata-secure.rule=Host(`netdata.p.lan.starstreak.net`)"
       - "traefik.http.routers.netdata-secure.tls=true"
       - "traefik.http.routers.netdata-secure.service=netdata-svc"
       - "traefik.http.services.netdata-svc.loadbalancer.server.port=19999"

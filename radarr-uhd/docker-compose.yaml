@@ -19,11 +19,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.radarr-uhd.entrypoints=http"
-      - "traefik.http.routers.radarr-uhd.rule=Host(`radarr-uhd.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.radarr-uhd.rule=Host(`radarr-uhd.p.lan.starstreak.net`)"
       - "traefik.http.routers.radarr-uhd.middlewares=radarr-uhd-https-redirect"
       - "traefik.http.middlewares.radarr-uhd-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.radarr-uhd-secure.entrypoints=https"
-      - "traefik.http.routers.radarr-uhd-secure.rule=Host(`radarr-uhd.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.radarr-uhd-secure.rule=Host(`radarr-uhd.p.lan.starstreak.net`)"
       - "traefik.http.routers.radarr-uhd-secure.tls=true"
       - "traefik.http.routers.radarr-uhd-secure.service=radarr-uhd-svc"
       - "traefik.http.services.radarr-uhd-svc.loadbalancer.server.port=7878"

@@ -21,8 +21,8 @@ serversTransport:
 certificatesResolvers:
   cloudflare:
     acme:
-      email: admin+le@starstreak.net
-      storage: acme.json
+      email: paul+letsencrypt@starstreak.net
+      storage: /letsencrypt/acme.json
       dnsChallenge:
         provider: cloudflare
         resolvers:

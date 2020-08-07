@@ -1,0 +1,43 @@
+version: "2.1"
+services:
+  sonarr-uhd:
+    image: linuxserver/sonarr
+    container_name: sonarr-uhd
+    environment:
+      - PUID=2000
+      - PGID=2000
+      - TZ=Europe/London
+      - UMASK_SET=022 #optional
+    networks:
+      - traefik-proxy
+      - nzbget
+    volumes:
+      - config:/config
+      - /mnt/zstorage/media/television-uhd:/mnt/media/television-uhd
+      - downloads:/downloads
+    restart: unless-stopped
+    labels:
+      - "sui.enabled=true"
+      - "sui.icon=television-classic"
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr-uhd.entrypoints=http"
+      - "traefik.http.routers.sonarr-uhd.rule=Host(`sonarr-uhd.p.lan.starstreak.net`)"
+      - "traefik.http.routers.sonarr-uhd.middlewares=sonarr-uhd-https-redirect"
+      - "traefik.http.middlewares.sonarr-uhd-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.sonarr-uhd-secure.entrypoints=https"
+      - "traefik.http.routers.sonarr-uhd-secure.rule=Host(`sonarr-uhd.p.lan.starstreak.net`)"
+      - "traefik.http.routers.sonarr-uhd-secure.tls=true"
+      - "traefik.http.routers.sonarr-uhd-secure.service=sonarr-uhd-svc"
+      - "traefik.http.services.sonarr-uhd-svc.loadbalancer.server.port=8989"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
+  nzbget:
+    external: true
+
+volumes:
+  config:
+  downloads:
+    external: true

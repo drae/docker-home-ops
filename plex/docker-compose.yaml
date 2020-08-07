@@ -21,20 +21,21 @@ services:
       - PGID=2000
       - VERSION=public
       - UMASK_SET=022 #optional
-      - "ADVERTISE_IP=http://10.10.10.10:32400,https://plex.frostwolf.io:443"
+      - "ADVERTISE_IP=http://10.10.10.10:32400,https://plex.starstreak.net:443"
     volumes:
       - config:/config
-      - /mnt/zstorage/media/television:/mnt/media/television:ro
+      - /mnt/zstorage/media/television:/mnt/media/television:rw
+      - /mnt/zstorage/media/television-uhd:/mnt/media/television-uhd:ro
       - /mnt/zstorage/media/movies:/mnt/media/movies:ro
       - /mnt/zstorage/media/movies-uhd:/mnt/media/movies-uhd:ro
       - /mnt/zstorage/media/video:/mnt/media/video:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.plex-ext.entrypoints=http"
-      - "traefik.http.routers.plex-ext.rule=Host(`plex.frostwolf.io`)"
+      - "traefik.http.routers.plex-ext.rule=Host(`plex.starstreak.net`)"
       - "traefik.http.routers.plex-ext.middlewares=plex-https-redirect"
       - "traefik.http.routers.plex-ext-secure.entrypoints=https"
-      - "traefik.http.routers.plex-ext-secure.rule=Host(`plex.frostwolf.io`)"
+      - "traefik.http.routers.plex-ext-secure.rule=Host(`plex.starstreak.net`)"
       - "traefik.http.routers.plex-ext-secure.tls=true"
       - "traefik.http.routers.plex-ext-secure.service=plex-svc"
       - "traefik.http.middlewares.plex-https-redirect.redirectscheme.scheme=https"

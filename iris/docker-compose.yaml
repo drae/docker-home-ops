@@ -1,0 +1,52 @@
+version: "3"
+services:
+  snapserver:
+    image: jaedb/snapserver
+    networks:
+      - snapserver
+    ports:
+      - 1704:1704
+      - 1705:1705
+      - 1780:1780
+    volumes:
+      - /tmp/snapserver:/tmp
+      - ./docker/config/snapserver.conf:/etc/default/snapserver.conf
+
+  mopidy:
+    image: jaedb/iris
+    depends_on:
+      - snapserver
+    ports:
+      - 6600:6600
+    volumes:
+      # Uncomment these lines to use a host-managed development build
+      #- ./mopidy_iris:/iris/mopidy_iris
+      #- ./IRIS_VERSION:/iris/IRIS_VERSION
+      - ./docker/config/data:/var/lib/mopidy/iris
+      - ./docker/config/mopidy.conf:/config/mopidy.conf
+      - /mnt/zstorage/media/music:/var/lib/mopidy/media
+      - /tmp/snapserver:/tmp
+    networks:
+      - snapserver
+      - traefik-proxy
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mopidy.entrypoints=http"
+      - "traefik.http.routers.mopidy.rule=Host(`mopidy.p.lan.starstreak.net`)"
+      - "traefik.http.routers.mopidy.middlewares=mopidy-https-redirect"
+      - "traefik.http.middlewares.mopidy-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.mopidy-secure.entrypoints=https"
+      - "traefik.http.routers.mopidy-secure.rule=Host(`mopidy.p.lan.starstreak.net`)"
+      - "traefik.http.routers.mopidy-secure.tls=true"
+      - "traefik.http.routers.mopidy-secure.service=mopidy-svc"
+      - "traefik.http.routers.mopidy-secure.middlewares=mopidy-secure"
+      - "traefik.http.middlewares.mopidy-secure.headers.customrequestheaders.X-Forwarded-Proto=https"  
+      - "traefik.http.services.mopidy-svc.loadbalancer.server.port=6680"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  snapserver:
+  traefik-proxy:
+    external: true
+

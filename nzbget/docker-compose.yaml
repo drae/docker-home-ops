@@ -17,11 +17,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nzbget.entrypoints=http"
-      - "traefik.http.routers.nzbget.rule=Host(`nzbget.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.nzbget.rule=Host(`nzbget.p.lan.starstreak.net`)"
       - "traefik.http.routers.nzbget.middlewares=nzbget-https-redirect"
       - "traefik.http.middlewares.nzbget-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.nzbget-secure.entrypoints=https"
-      - "traefik.http.routers.nzbget-secure.rule=Host(`nzbget.p.lan.frostwolf.io`)"
+      - "traefik.http.routers.nzbget-secure.rule=Host(`nzbget.p.lan.starstreak.net`)"
       - "traefik.http.routers.nzbget-secure.tls=true"
       - "traefik.http.routers.nzbget-secure.service=nzbget-svc"
       - "traefik.http.services.nzbget-svc.loadbalancer.server.port=6789"
