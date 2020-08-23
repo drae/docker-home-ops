@@ -21,7 +21,7 @@ services:
       - PGID=2000
       - VERSION=public
       - UMASK_SET=022 #optional
-      - "ADVERTISE_IP=http://10.10.10.10:32400,https://plex.starstreak.net:443"
+      - "ADVERTISE_IP=http://10.1.10.10:32400,https://plex.starstreak.net:443"
     volumes:
       - config:/config
       - /mnt/zstorage/media/television:/mnt/media/television:rw

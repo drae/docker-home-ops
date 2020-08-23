@@ -1,4 +1,0 @@
-{
-  "connection": "unix",
-  "path": "/var/run/docker.sock"
-}
