@@ -1,0 +1,19 @@
+version: "2.1"
+services:
+  mail:
+    image: boky/postfix
+    container_name: mail
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - RELAYHOST=smtp.eu.mailgun.org
+      - RELAYHOST_USERNAME=$MAILGUN_USERNAME
+      - RELAYHOST_PASSWORD=$MAILGUN_PASSWORD
+      - ALLOWED_SENDER_DOMAINS=starstreak.net
+      - MASQUERADED_DOMAINS=starstreak.net
+    ports:
+      - 587:587
+    volumes:
+      - ./dkim:/etc/opendkim/keys
+    restart: unless-stopped
