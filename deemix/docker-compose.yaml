@@ -1,0 +1,37 @@
+version: "3.3"
+services:
+  deemix:
+    image: registry.gitlab.com/bockiii/deemix-docker
+    container_name: deemix
+    environment:
+      - PUID=2000
+      - PGID=2000
+      - TZ=Europe/London
+      - ARL=ec4677f2073fb313d7ad346703a53f47472c0fb354b8f0179f95d444fbf641e4aaadee35c90cf0afd6f1bbb8ae2a9c2786430fa1ff8713be95c39fc1f3168c713044b516b3c4ae5325679ef2dd23799cbcc3db4b8db465b66bbcd6e9bda0bde5
+      - UMASK_SET=022
+      - DEEZUI=false
+    networks:
+      - traefik-proxy
+    volumes:
+      - config:/config
+      - /mnt/zstorage/media/music:/downloads
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.deemix.entrypoints=http"
+      - "traefik.http.routers.deemix.rule=Host(`deemix.p.lan.starstreak.net`)"
+      - "traefik.http.routers.deemix.middlewares=deemix-https-redirect"
+      - "traefik.http.middlewares.deemix-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.deemix-secure.entrypoints=https"
+      - "traefik.http.routers.deemix-secure.rule=Host(`deemix.p.lan.starstreak.net`)"
+      - "traefik.http.routers.deemix-secure.tls=true"
+      - "traefik.http.routers.deemix-secure.service=deemix-svc"
+      - "traefik.http.services.deemix-svc.loadbalancer.server.port=6595"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
+
+volumes:
+  config:

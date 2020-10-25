@@ -10,25 +10,27 @@ services:
       - "3005:3005/tcp"
       - "8324:8324/tcp"
       - "32469:32469/tcp"
-      - "1900:1900/udp"
       - "32400:32400/tcp"
       - "32410:32410/udp"
       - "32412:32412/udp"
       - "32413:32413/udp"
       - "32414:32414/udp"
+      - "33400:33400/tcp"
     environment:
       - PUID=2000
       - PGID=2000
-      - VERSION=public
+      - VERSION=latest
       - UMASK_SET=022 #optional
       - "ADVERTISE_IP=http://10.1.10.10:32400,https://plex.starstreak.net:443"
     volumes:
       - config:/config
       - /mnt/zstorage/media/television:/mnt/media/television:rw
       - /mnt/zstorage/media/television-uhd:/mnt/media/television-uhd:ro
-      - /mnt/zstorage/media/movies:/mnt/media/movies:ro
+      - /mnt/zstorage/media/movies:/mnt/media/movies:rw
       - /mnt/zstorage/media/movies-uhd:/mnt/media/movies-uhd:ro
       - /mnt/zstorage/media/video:/mnt/media/video:ro
+      - /mnt/zstorage/media/music:/mnt/media/music:ro
+      - /mnt/zstorage/media/pvr:/mnt/media/pvr:rw
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.plex-ext.entrypoints=http"

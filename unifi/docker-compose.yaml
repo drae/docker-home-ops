@@ -1,38 +1,23 @@
 version: '2.2'
 services:
-  mongo:
-    image: mongo:3.4
-    container_name: ${COMPOSE_PROJECT_NAME}-mongo
+  unifi-controller:
+    container_name: "unifi-controller"
+    image: "linuxserver/unifi-controller"
     networks:
-      - unifi
-    restart: always
-    volumes:
-      - db:/data/db
-  controller:
-    image: "jacobalberty/unifi:${TAG:-latest}"
-    container_name: ${COMPOSE_PROJECT_NAME}-controller
-    depends_on:
-      - mongo
-    init: true
-    networks:
-      - unifi
       - traefik-proxy
-    restart: always
+    restart: unless-stopped
     volumes:
-      - data:/unifi/data
-      - log:/unifi/log
-      - cert:/unifi/cert
-      - init:/unifi/init.d
+      - config:/config
     environment:
-      DB_URI: mongodb://mongo/unifi
-      STATDB_URI: mongodb://mongo/unifi_stat
-      DB_NAME: unifi
+      - PGID=1000
+      - PUID=1000
+      - MEM_LIMIT=1024M
     ports:
+      - 1900:1900/udp
       - 3478:3478/udp # STUN
+      - 5514:5514/tcp
       - 6789:6789/tcp # Speed test
       - 8080:8080/tcp # Device/ controller comm.
-      - 8880:8880/tcp # HTTP portal redirection
-      - 8843:8843/tcp # HTTPS portal redirection
       - 8443:8443/tcp
       - 10001:10001/udp # AP discovery
     labels:
@@ -48,24 +33,10 @@ services:
       - "traefik.http.services.unifi-svc.loadbalancer.server.port=8443"
       - "traefik.http.services.unifi-svc.loadbalancer.server.scheme=https"
       - "traefik.docker.network=traefik-proxy"
-  logs:
-    image: bash
-    container_name: ${COMPOSE_PROJECT_NAME}-logs
-    depends_on:
-      - controller
-    command: bash -c 'tail -F /unifi/log/*.log'
-    restart: always
-    volumes:
-      - log:/unifi/log
 
 volumes:
-  db:
-  data:
-  log:
-  cert:
-  init:
+  config:
 
 networks:
-  unifi:
   traefik-proxy:
     external: true

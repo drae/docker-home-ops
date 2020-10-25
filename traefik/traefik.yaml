@@ -15,6 +15,9 @@ providers:
   file:
     filename: /etc/traefik/rules.toml
 
+pilot:
+  token: "cc655248-2c99-425c-bfcd-f401a1098976"
+
 serversTransport:
   insecureSkipVerify: true
 
