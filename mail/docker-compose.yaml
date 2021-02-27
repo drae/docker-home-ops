@@ -3,7 +3,8 @@ services:
   mail:
     image: boky/postfix
     container_name: mail
-    network_mode: bridge
+    networks:
+      - egress
     environment:
       - PUID=1000
       - PGID=1000
@@ -18,3 +19,7 @@ services:
     volumes:
       - ./dkim:/etc/opendkim/keys
     restart: unless-stopped
+
+networks:
+  egress:
+    external: true
