@@ -9,6 +9,7 @@ services:
       - no-new-privileges:true
     networks:
       - traefik-proxy
+      - egress
     ports:
       - 80:80
       - 443:443
@@ -39,6 +40,8 @@ services:
 
 networks:
   traefik-proxy:
+    external: true
+  egress:
     external: true
 
 volumes:

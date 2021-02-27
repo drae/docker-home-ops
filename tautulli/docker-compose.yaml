@@ -9,6 +9,7 @@ services:
       - TZ=Europe/London
     networks:
       - traefik-proxy
+      - egress
     volumes:
       - config:/config
     restart: unless-stopped
@@ -27,6 +28,8 @@ services:
 
 networks:
   traefik-proxy:
+    external: true
+  egress:
     external: true
 
 volumes:

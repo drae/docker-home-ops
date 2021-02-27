@@ -5,6 +5,7 @@ services:
     image: "linuxserver/unifi-controller"
     networks:
       - traefik-proxy
+      - egress
     restart: unless-stopped
     volumes:
       - config:/config
@@ -39,4 +40,6 @@ volumes:
 
 networks:
   traefik-proxy:
+    external: true
+  egress:
     external: true

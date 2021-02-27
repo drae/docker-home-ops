@@ -11,6 +11,7 @@ services:
     networks:
       - traefik-proxy
       - nzbget
+      - vpn
     volumes:
       - config:/config
       - /mnt/zstorage/media/movies-uhd:/mnt/media/movies-uhd
@@ -34,6 +35,9 @@ networks:
     external: true
   nzbget:
     external: true
+  vpn:
+    external:
+      name: mullvad-vpn
 
 volumes:
   config:

@@ -7,11 +7,13 @@ services:
       - PUID=2000
       - PGID=2000
       - TZ=Europe/London
-      - ARL=ec4677f2073fb313d7ad346703a53f47472c0fb354b8f0179f95d444fbf641e4aaadee35c90cf0afd6f1bbb8ae2a9c2786430fa1ff8713be95c39fc1f3168c713044b516b3c4ae5325679ef2dd23799cbcc3db4b8db465b66bbcd6e9bda0bde5
+      - ARL=7a5675f9c9a8036c5ad1060d2efc39ac4198c6fc54c831664a18509c8bc68cf04eba998c421a9e793da1610a865e2855eae6b61b955a0d704e687cea8a02383a4fab81e814f479092b8b922bda4f8aa3fe5eb61595506c57c1690ccb26b76a44
+        #      - ARL=ec4677f2073fb313d7ad346703a53f47472c0fb354b8f0179f95d444fbf641e4aaadee35c90cf0afd6f1bbb8ae2a9c2786430fa1ff8713be95c39fc1f3168c713044b516b3c4ae5325679ef2dd23799cbcc3db4b8db465b66bbcd6e9bda0bde5
       - UMASK_SET=022
       - DEEZUI=false
     networks:
       - traefik-proxy
+      - vpn
     volumes:
       - config:/config
       - /mnt/zstorage/media/music:/downloads
@@ -32,6 +34,9 @@ services:
 networks:
   traefik-proxy:
     external: true
+  vpn:
+    external:
+      name: mullvad-vpn
 
 volumes:
   config:

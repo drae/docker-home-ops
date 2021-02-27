@@ -10,6 +10,7 @@ services:
     networks:
       - traefik-proxy
       - nzbget
+      - vpn
     volumes:
       - config:/config
       - downloads:/downloads
@@ -32,6 +33,9 @@ networks:
     external: true
   nzbget:
     external: true
+  vpn:
+    external:
+      name: mullvad-vpn
 
 volumes:
   config:
