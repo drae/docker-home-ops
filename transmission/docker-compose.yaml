@@ -1,0 +1,48 @@
+version: "2.1"
+services:
+  transmission:
+    image: ghcr.io/linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+#      - USER=username #optional
+#      - PASS=password #optional
+#      - WHITELIST=iplist #optional
+    volumes:
+      - config:/config
+      - downloads:/downloads
+      - /mnt/zstorage/scratch:/watch
+    restart: unless-stopped
+    networks:
+     - traefik-proxy
+     - vpn
+     - nzbget
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.transmission.entrypoints=http"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.p.lan.starstreak.net`)"
+      - "traefik.http.routers.transmission.middlewares=transmission-https-redirect"
+      - "traefik.http.middlewares.transmission-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.transmission-secure.entrypoints=https"
+      - "traefik.http.routers.transmission-secure.rule=Host(`transmission.p.lan.starstreak.net`)"
+      - "traefik.http.routers.transmission-secure.tls=true"
+      - "traefik.http.routers.transmission-secure.service=transmission-svc"
+      - "traefik.http.services.transmission-svc.loadbalancer.server.port=9091"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
+  nzbget:
+    external: true
+  vpn:
+    external:
+      name: mullvad-vpn
+
+volumes:
+  config:
+  downloads:
+    external: true
