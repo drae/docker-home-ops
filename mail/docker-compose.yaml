@@ -3,6 +3,7 @@ services:
   mail:
     image: boky/postfix
     container_name: mail
+    network_mode: bridge
     environment:
       - PUID=1000
       - PGID=1000
