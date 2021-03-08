@@ -1,0 +1,47 @@
+version: "2.1"
+services:
+  jackett:
+    image: ghcr.io/linuxserver/jackett
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - AUTO_UPDATE=true #optional
+#      - USER=username #optional
+#      - PASS=password #optional
+#      - WHITELIST=iplist #optional
+    volumes:
+      - config:/config
+      - downloads:/downloads
+    restart: unless-stopped
+    networks:
+     - traefik-proxy
+     - vpn
+     - nzbget
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jackett.entrypoints=http"
+      - "traefik.http.routers.jackett.rule=Host(`jackett.p.lan.starstreak.net`)"
+      - "traefik.http.routers.jackett.middlewares=jackett-https-redirect"
+      - "traefik.http.middlewares.jackett-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.jackett-secure.entrypoints=https"
+      - "traefik.http.routers.jackett-secure.rule=Host(`jackett.p.lan.starstreak.net`)"
+      - "traefik.http.routers.jackett-secure.tls=true"
+      - "traefik.http.routers.jackett-secure.service=jackett-svc"
+      - "traefik.http.services.jackett-svc.loadbalancer.server.port=9117"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
+  nzbget:
+    external: true
+  vpn:
+    external:
+      name: mullvad-vpn
+
+volumes:
+  config:
+  downloads:
+    external: true
