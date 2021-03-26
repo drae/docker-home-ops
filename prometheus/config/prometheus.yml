@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 5s
+  scrape_timeout: 5s
+
+rule_files:
+  - nodes.yml
+
+scrape_configs:
+  - job_name: 'prometheus'
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 'prometheus:9090'
+
+  - job_name: 'netdata-scrape'
+    metrics_path: '/api/v1/allmetrics'
+    params:
+      format: [prometheus_all_hosts]
+    honor_labels: true
+    static_configs:
+      - targets: 
+          - '10.1.10.10:19999'
+          - '10.1.10.5:19999'
+          - '10.1.10.6:19999'
+          - '10.1.10.7:19999'
+          - '10.1.10.98:19999'
