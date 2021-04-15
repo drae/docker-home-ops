@@ -24,3 +24,9 @@ scrape_configs:
           - '10.1.10.6:19999'
           - '10.1.10.7:19999'
           - '10.1.10.98:19999'
+
+  - job_name: 'opnsense'
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - '10.1.10.1:9100'

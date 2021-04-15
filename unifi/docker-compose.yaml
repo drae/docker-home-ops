@@ -2,7 +2,7 @@ version: '2.2'
 services:
   unifi-controller:
     container_name: "unifi-controller"
-    image: "linuxserver/unifi-controller"
+    image: linuxserver/unifi-controller:LTS-version-5.6.42
     networks:
       - traefik-proxy
       - egress
@@ -14,12 +14,11 @@ services:
       - PUID=1000
       - MEM_LIMIT=1024M
     ports:
-      - 1900:1900/udp
-      - 3478:3478/udp # STUN
-      - 5514:5514/tcp
-      - 6789:6789/tcp # Speed test
-      - 8080:8080/tcp # Device/ controller comm.
-      - 8443:8443/tcp
+      - 1900:1900/udp   # Discoverable on L2
+      - 3478:3478/udp   # STUN
+      - 6789:6789/tcp   # Speed test
+      - 8080:8080/tcp   # Device/ controller comm.
+      - 8443:8443/tcp   # Web frontend
       - 10001:10001/udp # AP discovery
     labels:
       - "traefik.enable=true"

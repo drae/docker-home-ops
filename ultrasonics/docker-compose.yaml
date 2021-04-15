@@ -1,0 +1,42 @@
+version: "3.7"
+services:
+  ultrasonics:
+    image: xdgfx/ultrasonics
+    container_name: ultrasonics
+    environment:
+      - PUID=2000
+      - PGID=2000
+      - TZ=Europe/London
+      - UMASK_SET=022 #optional
+    networks:
+      - traefik-proxy
+      - vpn
+    volumes:
+      - config:/config
+      - /mnt/zstorage/media/music:/mnt/media/music:rw
+      - /mnt/zstorage/media/playlists:/mnt/media/playlists:rw
+    restart: unless-stopped
+    labels:
+      - "sui.enabled=true"
+      - "sui.icon=television-classic"
+      - "traefik.enable=true"
+      - "traefik.http.routers.ultrasonics.entrypoints=http"
+      - "traefik.http.routers.ultrasonics.rule=Host(`ultrasonics.p.lan.starstreak.net`)"
+      - "traefik.http.routers.ultrasonics.middlewares=ultrasonics-https-redirect"
+      - "traefik.http.middlewares.ultrasonics-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.ultrasonics-secure.entrypoints=https"
+      - "traefik.http.routers.ultrasonics-secure.rule=Host(`ultrasonics.p.lan.starstreak.net`)"
+      - "traefik.http.routers.ultrasonics-secure.tls=true"
+      - "traefik.http.routers.ultrasonics-secure.service=ultrasonics-svc"
+      - "traefik.http.services.ultrasonics-svc.loadbalancer.server.port=5000"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
+  vpn:
+    external:
+      name: mullvad-vpn
+
+volumes:
+  config:
