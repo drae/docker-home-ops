@@ -1,0 +1,18 @@
+version: "3"
+services:
+  hera:
+    image: aschzero/hera:latest
+    container_name: hera
+    networks:
+      - hera
+      - egress
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./certs:/certs
+    restart: unless-stopped
+
+networks:
+  hera:
+    external: true
+  egress:
+    external: true
