@@ -1,3 +1,5 @@
 .env
 network-create.sh
 .gitsecret/keys/random_seed
+hera/certs/starstreak.net.pem
+hera/certs/coldhelix.com.pem
