@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   plex:
-    image: linuxserver/plex
+    image: linuxserver/plex:bionic-version-1.22.3.4392-d7c624def
     container_name: plex
     #    network_mode: host
     networks:
@@ -34,6 +34,8 @@ services:
       - /mnt/zstorage/media/pvr:/mnt/media/pvr:rw
       - /mnt/zstorage/media/pictures:/mnt/media/pictures:ro
     labels:
+      - "hera.hostname=plex.starstreak.net"
+      - "hera.port=32400"
       - "traefik.enable=true"
       - "traefik.http.routers.plex-ext.entrypoints=http"
       - "traefik.http.routers.plex-ext.rule=Host(`plex.p.starstreak.net`)"

@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   radarr-uhd:
-    image: linuxserver/radarr
+    image: linuxserver/radarr:amd64-version-3.0.2.4552
     container_name: radarr-uhd
     environment:
       - PUID=2000

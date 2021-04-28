@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   tautulli:
-    image: linuxserver/tautulli
+    image: linuxserver/tautulli:version-v2.7.2
     container_name: tautulli
     environment:
       - PUID=1000

@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   sonarr-uhd:
-    image: linuxserver/sonarr:preview
+    image: linuxserver/sonarr:version-3.0.6.1196
     container_name: sonarr-uhd
     environment:
       - PUID=2000
